@@ -32,8 +32,8 @@ public class Maze {
      * Initialize pheromones to a start value.
      */
     private void initializePheromones() {
-    	for(int i = 0; i<pheromones[0].length; i++){
-    		for(int j = 0; j<pheromones[1].length; j++){
+    	for(int i = 0; i<pheromones.length; i++){
+    		for(int j = 0; j<pheromones[i].length; j++){
     			pheromones[i][j] = 1;
     		}
     	}
