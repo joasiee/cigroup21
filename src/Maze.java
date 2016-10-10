@@ -1,5 +1,6 @@
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
@@ -52,6 +53,18 @@ public class Maze {
      * @param Q Normalization factor for amount of dropped pheromone
      */
     public void addPheromoneRoute(Route r, double Q) {
+    	Coordinate curr = r.getStart();
+    	//add pheromone for starting position
+    	pheromones[curr.getX()][curr.getY()] = pheromones[curr.getX()][curr.getY()] + Q; 
+    	
+    	//Create iterator for whole route
+    	Iterator<Direction> routeIter = r.getRoute().iterator();
+    	//For every coordinate update the pheromone
+    	while(routeIter.hasNext()){
+    		curr.add((Direction) routeIter.next());
+    		pheromones[curr.getX()][curr.getY()] = pheromones[curr.getX()][curr.getY()] + Q;
+    	}
+    	
     }
 
     /**
@@ -70,7 +83,11 @@ public class Maze {
      * @param rho evaporation factor
      */
     public void evaporate(double rho) {
-        ;
+    	for(int i = 0; i<pheromones.length; i++){
+    		for(int j = 0; j<pheromones[i].length; j++){
+    			pheromones[i][j] = pheromones[i][j] * rho;
+    		}
+    	}
     }
 
     /**
