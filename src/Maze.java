@@ -26,6 +26,7 @@ public class Maze {
         this.walls = walls;
         this.length = length;
         this.width = width;
+        this.pheromones = new double[this.length][this.width];
         initializePheromones();
     }
 
@@ -55,14 +56,14 @@ public class Maze {
     public void addPheromoneRoute(Route r, double Q) {
     	Coordinate curr = r.getStart();
     	//add pheromone for starting position
-    	pheromones[curr.getX()][curr.getY()] = pheromones[curr.getX()][curr.getY()] + Q; 
+    	pheromones[curr.getY()][curr.getX()] = pheromones[curr.getY()][curr.getX()] + Q; 
     	
     	//Create iterator for whole route
     	Iterator<Direction> routeIter = r.getRoute().iterator();
     	//For every coordinate update the pheromone
     	while(routeIter.hasNext()){
     		curr.add((Direction) routeIter.next());
-    		pheromones[curr.getX()][curr.getY()] = pheromones[curr.getX()][curr.getY()] + Q;
+    		pheromones[curr.getY()][curr.getX()] = pheromones[curr.getY()][curr.getX()] + Q;
     	}
     	
     }
@@ -113,7 +114,13 @@ public class Maze {
      * @return the pheromones of the neighbouring positions.
      */
     public SurroundingPheromone getSurroundingPheromone(Coordinate position) {
-        return null;
+    	double north = this.pheromones[position.getY() - 1][position.getX()];
+    	double east = this.pheromones[position.getY()][position.getX() + 1];
+    	double south = this.pheromones[position.getY() + 1][position.getX()];
+    	double west = this.pheromones[position.getY()][position.getX() - 1];
+    	
+    	return (new SurroundingPheromone(north, east, south, west));
+    	
     }
 
     /**
@@ -122,6 +129,9 @@ public class Maze {
      * @return pheromone at point
      */
     private double getPheromone(Coordinate pos) {
+        if(inBounds(pos)){
+        	return (this.pheromones[pos.getY()][pos.getX()]);
+        }
         return 0;
     }
 
@@ -164,10 +174,10 @@ public class Maze {
         Scanner scan = new Scanner(new FileReader(filePath));
         int width = scan.nextInt();
         int length = scan.nextInt();
-        int[][] mazeLayout = new int[width][length];
+        int[][] mazeLayout = new int[length][width];
         for (int y = 0; y < length; y++) {
             for (int x = 0; x < width; x++) {
-                mazeLayout[x][y] = scan.nextInt();
+                mazeLayout[y][x] = scan.nextInt();
             }
         }
         scan.close();
