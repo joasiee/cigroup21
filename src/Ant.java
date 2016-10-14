@@ -32,6 +32,55 @@ public class Ant {
      */
     public Route findRoute() {
         Route route = new Route(start);
+        Direction prevDir = null;
+        currentPosition = start;
+        while (currentPosition != end){
+        	SurroundingPheromone sp = maze.getSurroundingPheromone(currentPosition);
+        	double total = 0;
+        	double northOdds = 1;
+        	double eastOdds = 1;
+        	double southOdds = 1;
+        	double westOdds = 1;
+        	if (prevDir == null){
+            	total = sp.getTotalSurroundingPheromone();
+            	northOdds = sp.get(Direction.North);
+            	eastOdds = northOdds + sp.get(Direction.East);
+            	southOdds = eastOdds + sp.get(Direction.South);
+            	westOdds = southOdds + sp.get(Direction.West);
+        	} else if (prevDir == Direction.North){
+            	total = sp.getTotalSurroundingPheromone() - sp.get(Direction.North);
+            	eastOdds = sp.get(Direction.East);
+            	southOdds = eastOdds + sp.get(Direction.South);
+            	westOdds = southOdds + sp.get(Direction.West);
+        	} else if (prevDir == Direction.East){
+            	total = sp.getTotalSurroundingPheromone() - sp.get(Direction.East);
+            	northOdds = sp.get(Direction.North);
+            	southOdds = northOdds + sp.get(Direction.South);
+            	westOdds = southOdds + sp.get(Direction.West);
+        	} else if (prevDir == Direction.South){
+            	total = sp.getTotalSurroundingPheromone() - sp.get(Direction.South);
+            	northOdds = sp.get(Direction.North);
+            	eastOdds = northOdds + sp.get(Direction.East);
+            	westOdds = eastOdds + sp.get(Direction.West);
+        	} else if (prevDir == Direction.West){
+            	total = sp.getTotalSurroundingPheromone() - sp.get(Direction.West);
+            	northOdds = sp.get(Direction.North);
+            	eastOdds = northOdds + sp.get(Direction.East);
+            	southOdds = eastOdds + sp.get(Direction.South);
+        	}
+        	double r = rand.nextDouble() * total;
+        	if (r > westOdds){
+        		prevDir = Direction.West;
+        	} else if (r > southOdds){
+        		prevDir = Direction.South;
+        	} else if (r > eastOdds){
+        		prevDir = Direction.East;
+        	} else {
+        		prevDir = Direction.North;
+        	}
+    		route.add(prevDir);
+    		currentPosition = currentPosition.add(prevDir);
+        }
         return route;
     }
 }
