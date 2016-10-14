@@ -53,53 +53,65 @@ public class Ant {
 		while (!currentPosition.equals(end)) {
 			
 			sp = maze.getSurroundingPheromone(currentPosition);
+			
+			if (prevDir != null) {
+				if (Direction.dirToInt(prevDir) == 1) {
+					southOdds.oddValue = 0;
+					sp.setSouth(0);
+				}
+				else if (Direction.dirToInt(prevDir) == 0) {
+					westOdds.oddValue = 0;
+					sp.setWest(0);
+				}
+				else if (Direction.dirToInt(prevDir) == 3) {
+					northOdds.oddValue = 0;
+					sp.setNorth(0);
+				}
+				else {
+					eastOdds.oddValue = 0;
+					sp.setEast(0);
+				}
+			}
+			
 			total = sp.getTotalSurroundingPheromone();
 			northOdds.oddValue = sp.get(Direction.North) / total;
 			eastOdds.oddValue = sp.get(Direction.East) / total;
 			southOdds.oddValue = sp.get(Direction.South) / total;
 			westOdds.oddValue = sp.get(Direction.West) / total;
+			
+			if(total != 0){
+				double r = rand.nextDouble();
+				while (!((r < northOdds.oddValue) | (r < eastOdds.oddValue) | (r < southOdds.oddValue) | (r < westOdds.oddValue))) {
+					r = rand.nextDouble() * total;
+				}
 
-			if (prevDir != null) {
-				if (Direction.dirToInt(prevDir) == 1) {
-					southOdds.oddValue = 0;
+				if (r < northOdds.oddValue) {
+					prevDir = Direction.North;
+					northOdds.active = true;
+				} if (r < eastOdds.oddValue) {
+					prevDir = Direction.East;
+					eastOdds.active = true;
+				} if (r < southOdds.oddValue) {
+					prevDir = Direction.South;
+					southOdds.active = true;
+				} if (r < westOdds.oddValue) {
+					prevDir = Direction.West;
+					westOdds.active = true;
 				}
-				else if (Direction.dirToInt(prevDir) == 0) {
-					westOdds.oddValue = 0;
-				}
-				else if (Direction.dirToInt(prevDir) == 3) {
-					northOdds.oddValue = 0;
-				}
-				else {
-					eastOdds.oddValue = 0;
-				}
+				
+				ArrayList<Odds> odds = new ArrayList<Odds>();
+				odds.add(northOdds);
+				odds.add(eastOdds);
+				odds.add(southOdds);
+				odds.add(westOdds);
+				
+				prevDir = Odds.randomActiveOdd(odds).getDirection();
 			}
-
-			double r = rand.nextDouble();
-			while (!((r < northOdds.oddValue) | (r < eastOdds.oddValue) | (r < southOdds.oddValue) | (r < westOdds.oddValue))) {
-				r = rand.nextDouble() * total;
-			}
-
-			if (r < northOdds.oddValue) {
-				prevDir = Direction.North;
-				northOdds.active = true;
-			} if (r < eastOdds.oddValue) {
-				prevDir = Direction.East;
-				eastOdds.active = true;
-			} if (r < southOdds.oddValue) {
-				prevDir = Direction.South;
-				southOdds.active = true;
-			} if (r < westOdds.oddValue) {
-				prevDir = Direction.West;
-				westOdds.active = true;
+			else{
+				prevDir = prevDir.reverseDirection();
 			}
 			
-			ArrayList<Odds> odds = new ArrayList<Odds>();
-			odds.add(northOdds);
-			odds.add(eastOdds);
-			odds.add(southOdds);
-			odds.add(westOdds);
 			
-			prevDir = Odds.randomActiveOdd(odds).getDirection();
 
 			route.add(prevDir);
 			currentPosition = currentPosition.add(prevDir);
