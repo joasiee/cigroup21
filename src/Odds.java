@@ -29,6 +29,7 @@ public class Odds {
 			if (odd.active == true){
 				res.add(odd);
 			}
+			odd.active = false;
 		}
 		
 		Random rand = new Random();

@@ -39,18 +39,20 @@ public class Ant {
 	 * @return The route the ant found through the maze.
 	 */
 	public Route findRoute() {
+		
 		Route route = new Route(start);
 		Direction prevDir = null;
+		Odds northOdds = new Odds(1,Direction.North);
+		Odds eastOdds = new Odds(1,Direction.East);
+		Odds southOdds = new Odds(1,Direction.South);
+		Odds westOdds = new Odds(1,Direction.West);
 		currentPosition = start;
+		SurroundingPheromone sp;
+		double total = 0;
+		
 		while (!currentPosition.equals(end)) {
-			SurroundingPheromone sp = maze.getSurroundingPheromone(currentPosition);
-			double total = 0;
 			
-			Odds northOdds = new Odds(1,Direction.North);
-			Odds eastOdds = new Odds(1,Direction.East);
-			Odds southOdds = new Odds(1,Direction.South);
-			Odds westOdds = new Odds(1,Direction.West);
-
+			sp = maze.getSurroundingPheromone(currentPosition);
 			total = sp.getTotalSurroundingPheromone();
 			northOdds.oddValue = sp.get(Direction.North) / total;
 			eastOdds.oddValue = sp.get(Direction.East) / total;
@@ -61,13 +63,13 @@ public class Ant {
 				if (Direction.dirToInt(prevDir) == 1) {
 					southOdds.oddValue = 0;
 				}
-				if (Direction.dirToInt(prevDir) == 0) {
+				else if (Direction.dirToInt(prevDir) == 0) {
 					westOdds.oddValue = 0;
 				}
-				if (Direction.dirToInt(prevDir) == 3) {
+				else if (Direction.dirToInt(prevDir) == 3) {
 					northOdds.oddValue = 0;
 				}
-				if (Direction.dirToInt(prevDir) == 2) {
+				else {
 					eastOdds.oddValue = 0;
 				}
 			}
