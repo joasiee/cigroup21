@@ -114,13 +114,15 @@ public class Maze {
      * @return the pheromones of the neighbouring positions.
      */
     public SurroundingPheromone getSurroundingPheromone(Coordinate position) {
-    	double north = this.pheromones[position.getY() - 1][position.getX()];
-    	double east = this.pheromones[position.getY()][position.getX() + 1];
-    	double south = this.pheromones[position.getY() + 1][position.getX()];
-    	double west = this.pheromones[position.getY()][position.getX() - 1];
-    	
-    	return (new SurroundingPheromone(north, east, south, west));
-    	
+    	if(inBounds(position)){
+    		double north = this.pheromones[position.getY() - 1][position.getX()];
+        	double east = this.pheromones[position.getY()][position.getX() + 1];
+        	double south = this.pheromones[position.getY() + 1][position.getX()];
+        	double west = this.pheromones[position.getY()][position.getX() - 1];
+        	
+        	return (new SurroundingPheromone(north, east, south, west));
+    	}
+    	return (new SurroundingPheromone(0, 0, 0, 0));
     }
 
     /**

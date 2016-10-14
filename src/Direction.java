@@ -1,7 +1,6 @@
 import java.util.EnumMap;
 
 /**
- * lol
  * Enum representing the directions an ant can take.
  */
 public enum Direction {
