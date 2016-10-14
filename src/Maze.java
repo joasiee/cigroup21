@@ -41,7 +41,12 @@ public class Maze {
 	private void initializePheromones() {
 		for (int i = 0; i < pheromones.length; i++) {
 			for (int j = 0; j < pheromones[i].length; j++) {
-				pheromones[i][j] = 1;
+				if(this.walls[i][j] == 1){
+					pheromones[i][j] = 1;
+				}
+				else{
+					pheromones[i][j] = 0;
+				}
 			}
 		}
 	}
