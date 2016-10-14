@@ -27,7 +27,16 @@ public class AntColonyOptimization {
      */
     public Route findShortestRoute(PathSpecification spec) {
         maze.reset();
-        return null;
+        for (int i = 0; i < generations; i++) {
+			for (int j = 0; j < antsPerGen; j++) {
+				Ant a = new Ant(maze, spec);
+				Route r = a.findRoute();
+				maze.addPheromoneRoute(r, Q);
+			}
+			maze.evaporate(evaporation);
+		}
+        Ant finalAnt = new Ant(maze, spec);
+        return finalAnt.findRoute();
     }
 
     /**
