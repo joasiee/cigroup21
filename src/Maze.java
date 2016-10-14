@@ -67,16 +67,18 @@ public class Maze {
 	 *            Normalization factor for amount of dropped pheromone
 	 */
 	public void addPheromoneRoute(Route r, double Q) {
+		int size = r.getRoute().size();
+		double pheromoneToAdd = Q / size;
 		Coordinate curr = r.getStart();
 		// add pheromone for starting position
-		pheromones[curr.getY()][curr.getX()] = pheromones[curr.getY()][curr.getX()] + Q;
+		pheromones[curr.getY()][curr.getX()] = pheromones[curr.getY()][curr.getX()] + pheromoneToAdd;
 
 		// Create iterator for whole route
 		Iterator<Direction> routeIter = r.getRoute().iterator();
 		// For every coordinate update the pheromone
 		while (routeIter.hasNext()) {
 			curr.add((Direction) routeIter.next());
-			pheromones[curr.getY()][curr.getX()] = pheromones[curr.getY()][curr.getX()] + Q;
+			pheromones[curr.getY()][curr.getX()] = pheromones[curr.getY()][curr.getX()] + pheromoneToAdd;
 		}
 
 	}
@@ -104,7 +106,7 @@ public class Maze {
 	public void evaporate(double rho) {
 		for (int i = 0; i < pheromones.length; i++) {
 			for (int j = 0; j < pheromones[i].length; j++) {
-				pheromones[i][j] = pheromones[i][j] * rho;
+				pheromones[i][j] = pheromones[i][j] * (1 - rho);
 			}
 		}
 	}
@@ -190,7 +192,7 @@ public class Maze {
 	 * @return Whether the position is in the current maze
 	 */
 	private boolean inBounds(Coordinate position) {
-		return position.xBetween(0, length) && position.yBetween(0, width);
+		return position.xBetween(0, width) && position.yBetween(0, length);
 	}
 	
 	/**
