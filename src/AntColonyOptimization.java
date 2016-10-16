@@ -53,19 +53,19 @@ public class AntColonyOptimization {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        return routes.pop();
-        /*a = new Ant(maze, spec);
-        return a.findRoute();*/
+        //return routes.pop();
+        a = new Ant(maze, spec);
+        return a.findRoute();
     }
 
     /**
      * Driver function for Assignment 1
      */
     public static void main(String[] args) throws FileNotFoundException {
-        int gen = 60;
-        int noGen = 200;
-        double Q = 30;
-        double evap = 0.3;
+        int gen = 75;
+        int noGen = 250;
+        double Q = 40;
+        double evap = 0.1;
         Maze maze = Maze.createMaze("./data/easy maze.txt");
         PathSpecification spec = PathSpecification.readCoordinates("./data/easy coordinates.txt");
         AntColonyOptimization aco = new AntColonyOptimization(maze, gen, noGen, Q, evap);

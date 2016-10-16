@@ -74,6 +74,7 @@ public class Maze {
 	public void addPheromoneRoute(Route r, double Q) {
 		int size = r.getRoute().size();
 		double pheromoneToAdd = Q / size;
+		ArrayList<Coordinate> coords = new ArrayList<Coordinate>();
 		Coordinate curr = r.getStart();
 
 		// Create iterator for whole route
@@ -81,8 +82,14 @@ public class Maze {
 		// For every coordinate update the pheromone
 		while (routeIter.hasNext()) {
 			curr = curr.add((Direction) routeIter.next());
-			if(pheromones[curr.getY()][curr.getX()] < 2000){
-				pheromones[curr.getY()][curr.getX()] = pheromones[curr.getY()][curr.getX()] + pheromoneToAdd;
+			if(!coords.contains(curr)){
+				coords.add(curr);
+			}
+		}
+		
+		for(Coordinate c : coords){
+			if(this.pheromones[c.getY()][c.getX()] < 500){
+				this.pheromones[c.getY()][c.getX()] = this.pheromones[c.getY()][c.getX()] + pheromoneToAdd;
 			}
 		}
 
