@@ -82,7 +82,7 @@ public class Ant {
 			if(total != 0){
 				double r = rand.nextDouble();
 				while (!((r < northOdds.oddValue) | (r < eastOdds.oddValue) | (r < southOdds.oddValue) | (r < westOdds.oddValue))) {
-					r = rand.nextDouble() * total;
+					r = rand.nextDouble();
 				}
 
 				if (r < northOdds.oddValue) {

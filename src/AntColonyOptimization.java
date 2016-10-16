@@ -62,10 +62,10 @@ public class AntColonyOptimization {
      * Driver function for Assignment 1
      */
     public static void main(String[] args) throws FileNotFoundException {
-        int gen = 30;
-        int noGen = 100;
+        int gen = 60;
+        int noGen = 200;
         double Q = 30;
-        double evap = 0.1;
+        double evap = 0.3;
         Maze maze = Maze.createMaze("./data/easy maze.txt");
         PathSpecification spec = PathSpecification.readCoordinates("./data/easy coordinates.txt");
         AntColonyOptimization aco = new AntColonyOptimization(maze, gen, noGen, Q, evap);

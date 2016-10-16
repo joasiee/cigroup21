@@ -81,7 +81,7 @@ public class Maze {
 		// For every coordinate update the pheromone
 		while (routeIter.hasNext()) {
 			curr = curr.add((Direction) routeIter.next());
-			if(pheromones[curr.getY()][curr.getX()] < 50){
+			if(pheromones[curr.getY()][curr.getX()] < 2000){
 				pheromones[curr.getY()][curr.getX()] = pheromones[curr.getY()][curr.getX()] + pheromoneToAdd;
 			}
 		}
