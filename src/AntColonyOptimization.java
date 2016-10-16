@@ -53,26 +53,26 @@ public class AntColonyOptimization {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        //return routes.pop();
-        a = new Ant(maze, spec);
-        return a.findRoute();
+        return routes.pop();
+        /*a = new Ant(maze, spec);
+        return a.findRoute();*/
     }
 
     /**
      * Driver function for Assignment 1
      */
     public static void main(String[] args) throws FileNotFoundException {
-        int gen = 75;
-        int noGen = 250;
+        int gen = 200;
+        int noGen = 1000;
         double Q = 40;
-        double evap = 0.1;
-        Maze maze = Maze.createMaze("./data/easy maze.txt");
-        PathSpecification spec = PathSpecification.readCoordinates("./data/easy coordinates.txt");
+        double evap = 0.3;
+        Maze maze = Maze.createMaze("./data/medium maze.txt");
+        PathSpecification spec = PathSpecification.readCoordinates("./data/medium coordinates.txt");
         AntColonyOptimization aco = new AntColonyOptimization(maze, gen, noGen, Q, evap);
         long startTime = System.currentTimeMillis();
         Route shortestRoute = aco.findShortestRoute(spec);
         System.out.println("Time taken: " + ((System.currentTimeMillis() - startTime) / 1000.0));
-        shortestRoute.writeToFile("./data/easy_solution.txt");
+        shortestRoute.writeToFile("./data/medium_solution.txt");
         System.out.println(shortestRoute.size());
     }
 }
