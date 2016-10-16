@@ -1,5 +1,10 @@
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -70,15 +75,15 @@ public class Maze {
 		int size = r.getRoute().size();
 		double pheromoneToAdd = Q / size;
 		Coordinate curr = r.getStart();
-		// add pheromone for starting position
-		pheromones[curr.getY()][curr.getX()] = pheromones[curr.getY()][curr.getX()] + pheromoneToAdd;
 
 		// Create iterator for whole route
 		Iterator<Direction> routeIter = r.getRoute().iterator();
 		// For every coordinate update the pheromone
 		while (routeIter.hasNext()) {
-			curr.add((Direction) routeIter.next());
-			pheromones[curr.getY()][curr.getX()] = pheromones[curr.getY()][curr.getX()] + pheromoneToAdd;
+			curr = curr.add((Direction) routeIter.next());
+			if(pheromones[curr.getY()][curr.getX()] < 50){
+				pheromones[curr.getY()][curr.getX()] = pheromones[curr.getY()][curr.getX()] + pheromoneToAdd;
+			}
 		}
 
 	}
@@ -118,6 +123,25 @@ public class Maze {
 	 */
 	public int getWidth() {
 		return width;
+	}
+	
+	public void writePheromones() throws IOException{
+		StringBuilder builder = new StringBuilder();
+		for(int i = 0; i < pheromones.length; i++)//for each row
+		{
+		   for(int j = 0; j < pheromones[i].length; j++)//for each column
+		   {
+			   BigDecimal bd = new BigDecimal(pheromones[i][j]);
+			   bd = bd.setScale(2, BigDecimal.ROUND_HALF_UP);
+		      builder.append("[" + bd.doubleValue() +"] ");//append to the output string
+		      if(j < pheromones.length - 1)//if this is not the last row element
+		         builder.append(",");//then add comma (if you don't like commas you can use spaces)
+		   }
+		   builder.append("\n");//append new line at the end of the row
+		}
+		BufferedWriter writer = new BufferedWriter(new FileWriter("pheromones.txt"));
+		writer.write(builder.toString());//save the string representation of the board
+		writer.close();
 	}
 
 	/**

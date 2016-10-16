@@ -1,4 +1,5 @@
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Stack;
 
@@ -28,30 +29,42 @@ public class AntColonyOptimization {
      */
     public Route findShortestRoute(PathSpecification spec) {
         maze.reset();
+        Ant a;
         int bestSize = 0;
         Stack<Route> routes = new Stack<Route>();
         for (int i = 0; i < generations; i++) {
+        	ArrayList<Route> antRoutes = new ArrayList<Route>();
 			for (int j = 0; j < antsPerGen; j++) {
-				Ant a = new Ant(maze, spec);
+				a = new Ant(maze, spec);
 				Route r = a.findRoute();
-				maze.addPheromoneRoute(r, Q);
+				antRoutes.add(r);
 				if(r.getRoute().size()<bestSize | bestSize == 0){
 					routes.push(r);
 					bestSize = r.getRoute().size();
 				}
 			}
 			maze.evaporate(evaporation);
+			maze.addPheromoneRoutes(antRoutes, Q);
+
+		}
+        try {
+			maze.writePheromones();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
         return routes.pop();
+        /*a = new Ant(maze, spec);
+        return a.findRoute();*/
     }
 
     /**
      * Driver function for Assignment 1
      */
     public static void main(String[] args) throws FileNotFoundException {
-        int gen = 60;
-        int noGen = 200;
-        double Q = 1;
+        int gen = 30;
+        int noGen = 100;
+        double Q = 30;
         double evap = 0.1;
         Maze maze = Maze.createMaze("./data/easy maze.txt");
         PathSpecification spec = PathSpecification.readCoordinates("./data/easy coordinates.txt");
