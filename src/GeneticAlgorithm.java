@@ -37,12 +37,12 @@ public class GeneticAlgorithm {
      * Assignment 2.b
      */
     public static void main(String[] args) throws IOException, ClassNotFoundException {
-        int populationSize = 20;
-        int generations = 20;
-        String persistFile = "./tmp/productMatrixDist";
-        TSPData tspData = TSPData.readFromFile(persistFile);
-        GeneticAlgorithm ga = new GeneticAlgorithm(generations, populationSize);
-        int[] solution = ga.solveTSP(tspData);
-        tspData.writeActionFile(solution, "./data/TSP solution.txt");
+        //int populationSize = 20;
+        //int generations = 20;
+        //String persistFile = "./tmp/productMatrixDist";
+        //TSPData tspData = TSPData.readFromFile(persistFile);
+        //GeneticAlgorithm ga = new GeneticAlgorithm(generations, populationSize);
+        //int[] solution = ga.solveTSP(tspData);
+        //tspData.writeActionFile(solution, "./data/TSP solution.txt");
     }
 }
