@@ -33,17 +33,22 @@ public class AntColonyOptimization {
         int bestSize = 0;
         Stack<Route> routes = new Stack<Route>();
         for (int i = 0; i < generations; i++) {
-        	ArrayList<Route> antRoutes = new ArrayList<Route>();
+        	System.out.println("Gen#: " + i);
+        	ArrayList<ArrayList<Coordinate>> antRoutes = new ArrayList<ArrayList<Coordinate>>();
 			for (int j = 0; j < antsPerGen; j++) {
+	        	System.out.println("Ant#: " + j);
 				a = new Ant(maze, spec);
 				Route r = a.findRoute();
-				antRoutes.add(r);
+				ArrayList<Coordinate> coordinateRoute = r.removeLoops();
+				antRoutes.add(coordinateRoute);
 				if(r.getRoute().size()<bestSize | bestSize == 0){
 					routes.push(r);
 					bestSize = r.getRoute().size();
 				}
 			}
+			//System.out.println("evap");
 			maze.evaporate(evaporation);
+			//System.out.println("add Pheromone routes");
 			maze.addPheromoneRoutes(antRoutes, Q);
 
 		}
@@ -62,9 +67,9 @@ public class AntColonyOptimization {
      * Driver function for Assignment 1
      */
     public static void main(String[] args) throws FileNotFoundException {
-        int gen = 200;
-        int noGen = 1000;
-        double Q = 40;
+        int gen = 50;
+        int noGen = 400;
+        double Q = 150;
         double evap = 0.3;
         Maze maze = Maze.createMaze("./data/medium maze.txt");
         PathSpecification spec = PathSpecification.readCoordinates("./data/medium coordinates.txt");

@@ -5,8 +5,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -70,10 +68,10 @@ public class Maze {
 	 * @param Q
 	 *            Normalization factor for amount of dropped pheromone
 	 */
-	public void addPheromoneRoute(Route r, double Q) {
-		int size = r.getRoute().size();
+	public void addPheromoneRoute(ArrayList<Coordinate> r, double Q) {
+		int size = r.size();
 		double pheromoneToAdd = Q / size;
-		ArrayList<Coordinate> coords = new ArrayList<Coordinate>();
+		/*ArrayList<Coordinate> coords = new ArrayList<Coordinate>();
 		Coordinate curr = r.getStart();
 
 		// Create iterator for whole route
@@ -84,9 +82,9 @@ public class Maze {
 			if(!coords.contains(curr)){
 				coords.add(curr);
 			}
-		}
+		}*/
 		
-		for(Coordinate c : coords){
+		for(Coordinate c : r){
 			if(this.pheromones[c.getY()][c.getX()] < 500){
 				this.pheromones[c.getY()][c.getX()] = this.pheromones[c.getY()][c.getX()] + pheromoneToAdd;
 			}
@@ -97,13 +95,13 @@ public class Maze {
 	/**
 	 * Update pheromones for a list of routes
 	 * 
-	 * @param routes
+	 * @param antRoutes
 	 *            A list of routes
 	 * @param Q
 	 *            Normalization factor for amount of dropped pheromone
 	 */
-	public void addPheromoneRoutes(List<Route> routes, double Q) {
-		for (Route r : routes) {
+	public void addPheromoneRoutes(ArrayList<ArrayList<Coordinate>> antRoutes, double Q) {
+		for (ArrayList<Coordinate> r : antRoutes) {
 			addPheromoneRoute(r, Q);
 		}
 	}

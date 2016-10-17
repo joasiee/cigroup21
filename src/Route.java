@@ -111,4 +111,23 @@ public class Route implements Serializable {
         pw.write(sb);
         pw.close();
     }
+
+	public ArrayList<Coordinate> removeLoops() {
+		ArrayList<Coordinate> wasHereList = new ArrayList<Coordinate>();
+		Coordinate current = start;
+		wasHereList.add(current);
+		for (int i = 0; i < route.size(); i++) {
+			Direction d = route.get(i);
+			current = current.add(d);
+			if (wasHereList.contains(current)){
+				int index = wasHereList.indexOf(current);
+				for (int j = index + 1; j < wasHereList.size(); j++) {
+					wasHereList.remove(j);
+				}
+			} else {
+				wasHereList.add(current);
+			}
+		}
+		return wasHereList;
+	}
 }
