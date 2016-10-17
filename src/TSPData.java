@@ -198,7 +198,9 @@ public class TSPData implements Serializable {
     public static TSPData readFromFile(String filePath) throws IOException, ClassNotFoundException {
         ObjectInputStream objectInputStream = new ObjectInputStream(
                 new FileInputStream(filePath));
-        return (TSPData) objectInputStream.readObject();
+        TSPData out = (TSPData) objectInputStream.readObject();
+        objectInputStream.close();
+        return out;
     }
 
     /**
@@ -213,13 +215,14 @@ public class TSPData implements Serializable {
         scan.useDelimiter(Pattern.compile("[:,;]\\s*"));
         int numberOfProducts = scan.nextInt();
         for (int i = 0; i < numberOfProducts; i++) {
-            int product = scan.nextInt();
+        	scan.nextInt();
+            //int product = scan.nextInt();
             int x = scan.nextInt();
             int y = scan.nextInt();
             productLocations.add(new Coordinate(x, y));
         }
         PathSpecification spec = PathSpecification.readCoordinates(coordinates);
-
+        scan.close();
         return new TSPData(productLocations, spec);
     }
 

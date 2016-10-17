@@ -42,4 +42,19 @@ public enum Direction {
                 throw new IllegalArgumentException("Case statement does not match all possible values");
         }
     }
+    
+    public Direction reverseDirection(){
+    	if (Direction.dirToInt(this) == 1) {
+    		return (Direction.South);
+		}
+		else if (Direction.dirToInt(this) == 0) {
+			return (Direction.West);
+		}
+		else if (Direction.dirToInt(this) == 3) {
+			return (Direction.North);
+		}
+		else {
+			return (Direction.East);
+		}
+    }
 }

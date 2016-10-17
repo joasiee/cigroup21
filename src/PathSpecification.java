@@ -70,6 +70,7 @@ public class PathSpecification implements Serializable{
         int endY = scan.nextInt();
         Coordinate start = new Coordinate(startX, startY);
         Coordinate end = new Coordinate(endX, endY);
+        scan.close();
         return new PathSpecification(start, end);
     }
 }
