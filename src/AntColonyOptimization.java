@@ -1,7 +1,6 @@
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Stack;
 
 /**
  * Class representing the first assignment. Finds shortest path between two points in a maze according to a specific
@@ -31,7 +30,7 @@ public class AntColonyOptimization {
         maze.reset();
         Ant a;
         int bestSize = 0;
-        Stack<Route> routes = new Stack<Route>();
+        ArrayList<Coordinate> bestRoute = null;
         for (int i = 0; i < generations; i++) {
         	System.out.println("Gen#: " + i);
         	ArrayList<ArrayList<Coordinate>> antRoutes = new ArrayList<ArrayList<Coordinate>>();
@@ -41,9 +40,9 @@ public class AntColonyOptimization {
 				Route r = a.findRoute();
 				ArrayList<Coordinate> coordinateRoute = r.removeLoops();
 				antRoutes.add(coordinateRoute);
-				if(r.getRoute().size()<bestSize | bestSize == 0){
-					routes.push(r);
-					bestSize = r.getRoute().size();
+				if(coordinateRoute.size()<bestSize || bestSize == 0){
+					bestRoute = coordinateRoute;
+					bestSize = coordinateRoute.size();
 				}
 			}
 			//System.out.println("evap");
@@ -58,26 +57,51 @@ public class AntColonyOptimization {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        return routes.pop();
+        return toDirRoute(bestRoute);
         /*a = new Ant(maze, spec);
         return a.findRoute();*/
     }
 
-    /**
+    private Route toDirRoute(ArrayList<Coordinate> bestRoute) {
+		Route out = new Route(bestRoute.get(0));
+		for (int i = 1; i < bestRoute.size(); i++) {
+			Direction dir = null;
+			
+			if (bestRoute.get(i-1).getX() == bestRoute.get(i).getX()) {
+				if (bestRoute.get(i-1).getY() < bestRoute.get(i).getY()) {
+					dir = Direction.South;
+				} else {
+					dir = Direction.North;
+				}
+			} else if(bestRoute.get(i-1).getX() < bestRoute.get(i).getX()) {
+				dir = Direction.East;
+			} else {
+				dir = Direction.West;
+			}
+			out.add(dir);
+			if (i<40){
+				System.out.println(dir);
+				System.out.println(bestRoute.get(i).toString());
+			}
+		}
+		return out;
+	}
+
+	/**
      * Driver function for Assignment 1
      */
     public static void main(String[] args) throws FileNotFoundException {
-        int gen = 50;
-        int noGen = 400;
+        int gen = 200;
+        int noGen = 30;
         double Q = 150;
-        double evap = 0.3;
-        Maze maze = Maze.createMaze("./data/medium maze.txt");
-        PathSpecification spec = PathSpecification.readCoordinates("./data/medium coordinates.txt");
+        double evap = .3;
+        Maze maze = Maze.createMaze("./data/insane maze.txt");
+        PathSpecification spec = PathSpecification.readCoordinates("./data/insane coordinates.txt");
         AntColonyOptimization aco = new AntColonyOptimization(maze, gen, noGen, Q, evap);
         long startTime = System.currentTimeMillis();
         Route shortestRoute = aco.findShortestRoute(spec);
         System.out.println("Time taken: " + ((System.currentTimeMillis() - startTime) / 1000.0));
-        shortestRoute.writeToFile("./data/medium_solution.txt");
+        shortestRoute.writeToFile("./data/insane_solution.txt");
         System.out.println(shortestRoute.size());
     }
 }

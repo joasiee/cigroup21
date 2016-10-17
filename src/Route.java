@@ -120,9 +120,10 @@ public class Route implements Serializable {
 			Direction d = route.get(i);
 			current = current.add(d);
 			if (wasHereList.contains(current)){
-				int index = wasHereList.indexOf(current);
-				for (int j = index + 1; j < wasHereList.size(); j++) {
-					wasHereList.remove(j);
+				int k = wasHereList.size() - 1;
+				while (!wasHereList.get(k).equals(current)){
+					wasHereList.remove(k);
+					k--;
 				}
 			} else {
 				wasHereList.add(current);

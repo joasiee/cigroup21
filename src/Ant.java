@@ -107,8 +107,6 @@ public class Ant {
 			else{
 				prevDir = prevDir.reverseDirection();
 			}
-			
-			
 
 			route.add(prevDir);
 			currentPosition = currentPosition.add(prevDir);
