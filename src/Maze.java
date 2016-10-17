@@ -1,5 +1,4 @@
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -19,8 +18,8 @@ public class Maze {
 	private int length;
 	private int[][] walls;
 	private double[][] pheromones;
-	private Coordinate start;
-	private Coordinate end;
+	//private Coordinate start;
+	//private Coordinate end;
 
 	/**
 	 * Constructor of a maze
@@ -208,12 +207,12 @@ public class Maze {
 	 *            Position coordinate
 	 * @return pheromone at point
 	 */
-	private double getPheromone(Coordinate pos) {
+	/*private double getPheromone(Coordinate pos) {
 		if (inBounds(pos)) {
 			return (this.pheromones[pos.getY()][pos.getX()]);
 		}
 		return 0;
-	}
+	}*/
 
 	/**
 	 * Check whether a coordinate lies in the current maze.

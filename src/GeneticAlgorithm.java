@@ -1,18 +1,17 @@
 import java.io.IOException;
-import java.util.ArrayList;
 
 /**
  * TSP problem solver using genetic algorithms
  */
 public class GeneticAlgorithm {
 
-    private int generations;
-    private int popSize;
+    //private int generations;
+    //private int popSize;
 
 
     public GeneticAlgorithm(int generations, int popSize) {
-        this.generations = generations;
-        this.popSize = popSize;
+        //this.generations = generations;
+        //this.popSize = popSize;
     }
 
 
@@ -20,7 +19,7 @@ public class GeneticAlgorithm {
      * Knuth-Yates shuffle, reordering a array randomly
      * @param chromosome array to shuffle.
      */
-    private void shuffle(int[] chromosome) {
+    /*private void shuffle(int[] chromosome) {
         int n = chromosome.length;
         for (int i = 0; i < n; i++) {
             int r = i + (int) (Math.random() * (n - i));
@@ -28,7 +27,7 @@ public class GeneticAlgorithm {
             chromosome[r] = chromosome[i];
             chromosome[i] = swap;
         }
-    }
+    }*/
 
     public int[] solveTSP(TSPData pd) {
         return new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16, 17};
