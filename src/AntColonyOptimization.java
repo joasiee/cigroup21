@@ -28,14 +28,15 @@ public class AntColonyOptimization {
      */
     public Route findShortestRoute(PathSpecification spec) {
         maze.reset();
+        GUI gui = new GUI();
         Ant a;
         int bestSize = 0;
         ArrayList<Coordinate> bestRoute = null;
         for (int i = 0; i < generations; i++) {
-        	System.out.println("Gen#: " + i);
+			gui.updateGen(i);
         	ArrayList<ArrayList<Coordinate>> antRoutes = new ArrayList<ArrayList<Coordinate>>();
 			for (int j = 0; j < antsPerGen; j++) {
-	        	System.out.println("Ant#: " + j);
+				gui.updateAnt(j);
 				a = new Ant(maze, spec);
 				Route r = a.findRoute();
 				ArrayList<Coordinate> coordinateRoute = r.removeLoops();
@@ -43,6 +44,7 @@ public class AntColonyOptimization {
 				if(coordinateRoute.size()<bestSize || bestSize == 0){
 					bestRoute = coordinateRoute;
 					bestSize = coordinateRoute.size();
+					gui.updateSize(bestSize);
 				}
 			}
 			//System.out.println("evap");
