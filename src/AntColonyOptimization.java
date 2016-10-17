@@ -44,6 +44,7 @@ public class AntColonyOptimization {
 				if(r.getRoute().size()<bestSize | bestSize == 0){
 					routes.push(r);
 					bestSize = r.getRoute().size();
+					gui.updateSize(bestSize);
 				}
 			}
 			maze.evaporate(evaporation);

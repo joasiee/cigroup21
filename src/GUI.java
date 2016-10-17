@@ -9,6 +9,7 @@ public class GUI {
 	private JTextField tf_gen;
 	private JTextField tf_ant;
 	private JTextField tf_time;
+	private JTextField tf_size;
 	private long startTime;
 	
 	public GUI(){
@@ -23,6 +24,7 @@ public class GUI {
 		JLabel lbl_gen = new JLabel("Generation: ");
 		JLabel lbl_ant = new JLabel("Ant: ");
 		JLabel lbl_time = new JLabel("Elapsed Time: ");
+		JLabel lbl_size = new JLabel("Best Size: ");
 		
 		tf_gen = new JTextField(8);
 		tf_gen.setEditable(false);
@@ -30,6 +32,8 @@ public class GUI {
 		tf_ant.setEditable(false);
 		tf_time = new JTextField(8);
 		tf_time.setEditable(false);
+		tf_size = new JTextField(8);
+		tf_size.setEditable(false);
 		
 		
 		GroupLayout layout = new GroupLayout(panel);
@@ -46,6 +50,9 @@ public class GUI {
 						.addComponent(lbl_ant, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 						.addComponent(tf_ant, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 				.addGroup(layout.createSequentialGroup()
+						.addComponent(lbl_size, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(tf_size, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+				.addGroup(layout.createSequentialGroup()
 						.addComponent(lbl_time, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 						.addComponent(tf_time, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 
@@ -56,6 +63,9 @@ public class GUI {
 				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
 						.addComponent(lbl_ant)
 						.addComponent(tf_ant))
+				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+						.addComponent(lbl_size)
+						.addComponent(tf_size))
 				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
 						.addComponent(lbl_time)
 						.addComponent(tf_time)));
@@ -82,6 +92,11 @@ public class GUI {
 	
 	public void updateAnt(int ant){
 		tf_ant.setText(Integer.toString(ant));
+		updateTime();
+	}
+	
+	public void updateSize(int size){
+		tf_size.setText(Integer.toString(size));
 		updateTime();
 	}
 	
