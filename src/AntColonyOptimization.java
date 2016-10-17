@@ -29,12 +29,15 @@ public class AntColonyOptimization {
      */
     public Route findShortestRoute(PathSpecification spec) {
         maze.reset();
+        GUI gui = new GUI();
         Ant a;
         int bestSize = 0;
         Stack<Route> routes = new Stack<Route>();
         for (int i = 0; i < generations; i++) {
+        	gui.updateGen(i);
         	ArrayList<Route> antRoutes = new ArrayList<Route>();
 			for (int j = 0; j < antsPerGen; j++) {
+				gui.updateAnt(j);
 				a = new Ant(maze, spec);
 				Route r = a.findRoute();
 				antRoutes.add(r);
