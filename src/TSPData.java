@@ -31,10 +31,10 @@ public class TSPData implements Serializable {
      * Additionally generate arrays that contain the length of all the routes.
      * @param maze
      */
-    public void calculateRoutes(AntColonyOptimization aco) {
-        productToProduct = buildDistanceMatrix(aco);
-        startToProduct = buildStartToProducts(aco);
-        productToEnd = buildProductsToEnd(aco);
+    public void calculateRoutes(AntColonyOptimization aco, GUI gui) {
+        productToProduct = buildDistanceMatrix(aco, gui);
+        startToProduct = buildStartToProducts(aco, gui);
+        productToEnd = buildProductsToEnd(aco, gui);
         buildDistanceLists();
     }
 
@@ -149,14 +149,15 @@ public class TSPData implements Serializable {
      * @param maze Maze to calculate optimal routes in
      * @return Optimal routes between all products in 2d array
      */
-    private Route[][] buildDistanceMatrix(AntColonyOptimization aco) {
+    private Route[][] buildDistanceMatrix(AntColonyOptimization aco, GUI gui) {
         int numberOfProduct = productLocations.size();
         Route[][] productToProduct = new Route[numberOfProduct][numberOfProduct];
         for (int i = 0; i < numberOfProduct; i++) {
             for (int j = 0; j < numberOfProduct; j++) {
+            	gui.updatePath((i) * numberOfProduct + (j + 1) );
                 Coordinate start = productLocations.get(i);
                 Coordinate end = productLocations.get(j);
-                productToProduct[i][j] = aco.findShortestRoute(new PathSpecification(start, end));
+                productToProduct[i][j] = aco.findShortestRoute(new PathSpecification(start, end), gui);
             }
         }
         return productToProduct;
@@ -167,11 +168,13 @@ public class TSPData implements Serializable {
      * @param maze Maze to calculate optimal routes in
      * @return Optimal route from start to products
      */
-    private Route[] buildStartToProducts(AntColonyOptimization aco) {
+    private Route[] buildStartToProducts(AntColonyOptimization aco, GUI gui) {
+    	int GUIstart = gui.getPath();
         Coordinate start = spec.getStart();
         Route[] startToProducts = new Route[productLocations.size()];
         for (int i = 0; i < productLocations.size(); i++) {
-            startToProducts[i] = aco.findShortestRoute(new PathSpecification(start, productLocations.get(i)));
+        	gui.updatePath(GUIstart + i);
+            startToProducts[i] = aco.findShortestRoute(new PathSpecification(start, productLocations.get(i)), gui);
         }
         return startToProducts;
     }
@@ -181,11 +184,13 @@ public class TSPData implements Serializable {
      * @param maze Maze to calculate optimal routes in
      * @return Optimal route from products to end
      */
-    private Route[] buildProductsToEnd(AntColonyOptimization aco) {
+    private Route[] buildProductsToEnd(AntColonyOptimization aco, GUI gui) {
+    	int GUIstart = gui.getPath();
         Coordinate end = spec.getEnd();
         Route[] productsToEnd = new Route[productLocations.size()];
         for (int i = 0; i < productLocations.size(); i++) {
-            productsToEnd[i] = aco.findShortestRoute(new PathSpecification(productLocations.get(i), end));
+        	gui.updatePath(GUIstart + i);
+            productsToEnd[i] = aco.findShortestRoute(new PathSpecification(productLocations.get(i), end), gui);
         }
         return productsToEnd;
     }
@@ -230,10 +235,11 @@ public class TSPData implements Serializable {
      * Assignment 2.a
      */
     public static void main(String[] args) throws IOException, ClassNotFoundException {
-        int gen = 1;
-        int noGen = 1;
-        double Q = 1000;
-        double evap = 0.1;
+        GUI gui = new GUI();
+    	int gen = 2;
+        int noGen = 3;
+        double Q = 150;
+        double evap = .3;
         String persistFile = "./tmp/productMatrixDist";
 
         String TSPpath = "./data/tsp products.txt";
@@ -241,7 +247,7 @@ public class TSPData implements Serializable {
         Maze maze = Maze.createMaze("./data/hard maze.txt");
         TSPData pd = TSPData.readSpecification(coordinates, TSPpath);
         AntColonyOptimization aco = new AntColonyOptimization(maze, gen, noGen, Q, evap);
-        pd.calculateRoutes(aco);
+        pd.calculateRoutes(aco, gui);
         pd.writeToFile(persistFile);
         TSPData pd2 = TSPData.readFromFile(persistFile);
         System.out.println(pd.equals(pd2));

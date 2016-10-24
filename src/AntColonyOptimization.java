@@ -26,9 +26,9 @@ public class AntColonyOptimization {
      * @param spec Spefication of the route we wish to optimize
      * @return ACO optimized route
      */
-    public Route findShortestRoute(PathSpecification spec) {
+    public Route findShortestRoute(PathSpecification spec, GUI gui) {
         maze.reset();
-        GUI gui = new GUI();
+        //GUI gui = new GUI();
         Ant a;
         int bestSize = 0;
         ArrayList<Coordinate> bestRoute = null;
@@ -81,10 +81,10 @@ public class AntColonyOptimization {
 				dir = Direction.West;
 			}
 			out.add(dir);
-			if (i<40){
+			/*if (i<40){
 				System.out.println(dir);
 				System.out.println(bestRoute.get(i).toString());
-			}
+			}*/
 		}
 		return out;
 	}
@@ -93,6 +93,7 @@ public class AntColonyOptimization {
      * Driver function for Assignment 1
      */
     public static void main(String[] args) throws FileNotFoundException {
+        GUI gui = new GUI();
         int gen = 200;
         int noGen = 30;
         double Q = 150;
@@ -101,7 +102,7 @@ public class AntColonyOptimization {
         PathSpecification spec = PathSpecification.readCoordinates("./data/insane coordinates.txt");
         AntColonyOptimization aco = new AntColonyOptimization(maze, gen, noGen, Q, evap);
         long startTime = System.currentTimeMillis();
-        Route shortestRoute = aco.findShortestRoute(spec);
+        Route shortestRoute = aco.findShortestRoute(spec, gui);
         System.out.println("Time taken: " + ((System.currentTimeMillis() - startTime) / 1000.0));
         shortestRoute.writeToFile("./data/insane_solution.txt");
         System.out.println(shortestRoute.size());

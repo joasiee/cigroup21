@@ -3,6 +3,7 @@ import java.awt.Toolkit;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.*;
+import javax.swing.text.JTextComponent;
 
 public class GUI {
 
@@ -10,6 +11,7 @@ public class GUI {
 	private JTextField tf_ant;
 	private JTextField tf_time;
 	private JTextField tf_size;
+	private JTextField tf_path;
 	private long startTime;
 	
 	public GUI(){
@@ -20,12 +22,15 @@ public class GUI {
 	private void setFrame(){
 		JFrame frame = new JFrame();
 		JPanel panel = new JPanel();
-		
+
+		JLabel lbl_path = new JLabel("Path: ");
 		JLabel lbl_gen = new JLabel("Generation: ");
 		JLabel lbl_ant = new JLabel("Ant: ");
 		JLabel lbl_time = new JLabel("Elapsed Time: ");
 		JLabel lbl_size = new JLabel("Best Size: ");
-		
+
+		tf_path = new JTextField(8);
+		tf_path.setEditable(false);
 		tf_gen = new JTextField(8);
 		tf_gen.setEditable(false);
 		tf_ant = new JTextField(8);
@@ -44,6 +49,9 @@ public class GUI {
 
 		layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
 				.addGroup(layout.createSequentialGroup()
+						.addComponent(lbl_path, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(tf_path, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+				.addGroup(layout.createSequentialGroup()
 						.addComponent(lbl_gen, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 						.addComponent(tf_gen, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 				.addGroup(layout.createSequentialGroup()
@@ -57,6 +65,9 @@ public class GUI {
 						.addComponent(tf_time, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 
 		layout.setVerticalGroup(layout.createSequentialGroup()
+				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+						.addComponent(lbl_path)
+						.addComponent(tf_path))
 				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
 						.addComponent(lbl_gen)
 						.addComponent(tf_gen))
@@ -83,6 +94,15 @@ public class GUI {
 		frame.setVisible(true);
 		
 		
+	}
+	
+	public int getPath(){
+		return Integer.parseInt(tf_path.getText());
+	}
+	
+	public void updatePath(int path){
+		tf_path.setText(Integer.toString(path));
+		updateTime();
 	}
 	
 	public void updateGen(int gen){
