@@ -236,6 +236,7 @@ public class TSPData implements Serializable {
      */
     public static void main(String[] args) throws IOException, ClassNotFoundException {
         GUI gui = new GUI();
+    	int gen = 20;
         int noGen = 30;
         double Q = 150;
         double evap = .3;
