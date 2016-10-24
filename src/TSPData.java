@@ -236,8 +236,7 @@ public class TSPData implements Serializable {
      */
     public static void main(String[] args) throws IOException, ClassNotFoundException {
         GUI gui = new GUI();
-    	int gen = 2;
-        int noGen = 3;
+        int noGen = 30;
         double Q = 150;
         double evap = .3;
         String persistFile = "./tmp/productMatrixDist";
