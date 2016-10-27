@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.util.Stack;
 
 /**
  * TSP problem solver using genetic algorithms
@@ -29,7 +30,7 @@ public class GeneticAlgorithm {
 		}
 	}
 
-	public int[] solveTSP(TSPData pd) {
+	public int[] solveTSP(TSPData pd,GUI gui) {	
 		Population pop = new Population();
 
 		// initial population creation using shuffler method
@@ -43,11 +44,15 @@ public class GeneticAlgorithm {
 
 		int[] currChromosomeOrder;
 		int totalRouteSize;
+		int bestSize = 9999999;
+		Stack<Chromosome> bestChromosome = new Stack<Chromosome>();
 		
 
 		// genetic algorithm
 		for (int i = 0; i < this.generations; i++) {
+			gui.updategenG(i);
 			for (int j = 0; j < this.popSize; j++) {
+				gui.updategenC(j);
 				
 				totalRouteSize = 0;
 
@@ -63,24 +68,34 @@ public class GeneticAlgorithm {
 
 				totalRouteSize += pd.getEndDistances()[currProduct - 1];
 				pop.chromosomes.get(j).setRouteSize(totalRouteSize);
+				if(totalRouteSize < bestSize){
+					bestSize = totalRouteSize;
+					gui.updateSize(bestSize);
+					bestChromosome.push(pop.chromosomes.get(j));
+				}
 			}
 			if(i != this.generations - 1){
 				pop = pop.findNextPopulation(this.popSize);
 			}
 		}
-		return pop.returnBest().getOrder();
+		
+		//return pop.returnBest().getOrder();
+		
+		return bestChromosome.pop().getOrder();
 	}
 
 	/**
 	 * Assignment 2.b
 	 */
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
-		int populationSize = 1000;
-		int generations = 2000;
+		GUI gui = new GUI();
+		int populationSize = 400;
+		int generations = 3000;
 		String persistFile = "./tmp/productMatrixDist";
 		TSPData tspData = TSPData.readFromFile(persistFile);
 		GeneticAlgorithm ga = new GeneticAlgorithm(generations, populationSize);
-		int[] solution = ga.solveTSP(tspData);
+		int[] solution = ga.solveTSP(tspData,gui);
 		tspData.writeActionFile(solution, "./data/TSP solution.txt");
+		System.out.println("Finished!");
 	}
 }

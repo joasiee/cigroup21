@@ -12,6 +12,8 @@ public class GUI {
 	private JTextField tf_time;
 	private JTextField tf_size;
 	private JTextField tf_path;
+	private JTextField tf_genG;
+	private JTextField tf_genC;
 	private long startTime;
 	
 	public GUI(){
@@ -28,6 +30,9 @@ public class GUI {
 		JLabel lbl_ant = new JLabel("Ant: ");
 		JLabel lbl_time = new JLabel("Elapsed Time: ");
 		JLabel lbl_size = new JLabel("Best Size: ");
+		
+		JLabel lbl_geneticGen = new JLabel("Genetic generation: ");
+		JLabel lbl_geneticChrom = new JLabel("Genetic Chromosome: ");
 
 		tf_path = new JTextField(8);
 		tf_path.setEditable(false);
@@ -39,6 +44,10 @@ public class GUI {
 		tf_time.setEditable(false);
 		tf_size = new JTextField(8);
 		tf_size.setEditable(false);
+		tf_genG = new JTextField(8);
+		tf_genG.setEditable(false);
+		tf_genC = new JTextField(8);
+		tf_genC.setEditable(false);
 		
 		
 		GroupLayout layout = new GroupLayout(panel);
@@ -62,7 +71,13 @@ public class GUI {
 						.addComponent(tf_size, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 				.addGroup(layout.createSequentialGroup()
 						.addComponent(lbl_time, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(tf_time, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+						.addComponent(tf_time, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+				.addGroup(layout.createSequentialGroup()
+						.addComponent(lbl_geneticGen, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(tf_genG, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+				.addGroup(layout.createSequentialGroup()
+						.addComponent(lbl_geneticChrom, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(tf_genC, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 
 		layout.setVerticalGroup(layout.createSequentialGroup()
 				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
@@ -79,7 +94,13 @@ public class GUI {
 						.addComponent(tf_size))
 				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
 						.addComponent(lbl_time)
-						.addComponent(tf_time)));
+						.addComponent(tf_time))
+				.addGroup(layout.createSequentialGroup()
+						.addComponent(lbl_geneticGen, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(tf_genG, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+				.addGroup(layout.createSequentialGroup()
+						.addComponent(lbl_geneticChrom, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(tf_genC, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 
 		frame.add(panel);
 		
@@ -117,6 +138,16 @@ public class GUI {
 	
 	public void updateSize(int size){
 		tf_size.setText(Integer.toString(size));
+		updateTime();
+	}
+	
+	public void updategenG(int genG){
+		tf_genG.setText(Integer.toString(genG));
+		updateTime();
+	}
+	
+	public void updategenC(int genC){
+		tf_genC.setText(Integer.toString(genC));
 		updateTime();
 	}
 	
