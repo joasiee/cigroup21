@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * TSP problem solver using genetic algorithms
@@ -7,10 +8,12 @@ public class GeneticAlgorithm {
 
 	private int generations;
 	private int popSize;
+	private ArrayList<int[]> chromosomes;
 
 	public GeneticAlgorithm(int generations, int popSize) {
 		this.generations = generations;
 		this.popSize = popSize;
+		chromosomes = new ArrayList<int[]>();
 	}
 
 	/**
@@ -30,7 +33,42 @@ public class GeneticAlgorithm {
 	}
 
 	public int[] solveTSP(TSPData pd) {
-		return new int[] { 0, 1, 6, 4, 13, 15, 3, 8, 17, 7, 9, 14, 11, 12, 5, 10, 2, 16 };
+
+		// initial population creation using shuffler method
+		int[] firstPop = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18 };
+		shuffle(firstPop);
+		for (int n = 0; n < this.popSize; n++) {
+			shuffle(firstPop);
+			int[] temp = firstPop.clone();
+			this.chromosomes.add(temp);
+		}
+
+		int[] currChromosome;
+		int totalRouteSize;
+		Population pop = new Population();
+
+		// genetic algorithm
+		for (int i = 0; i < this.generations; i++) {
+			for (int j = 0; j < this.popSize; j++) {
+				
+				totalRouteSize = 0;
+
+				currChromosome = this.chromosomes.get(j);
+				int currProduct = currChromosome[0];
+				totalRouteSize += pd.getStartDistances()[currProduct - 1];
+
+				for (int x = 1; x < currChromosome.length; x++) {
+					int nextProduct = currChromosome[x];
+					totalRouteSize += pd.getDistances()[currProduct - 1][nextProduct - 1];
+					currProduct = nextProduct;
+				}
+
+				totalRouteSize += pd.getEndDistances()[currProduct - 1];
+				Chromosome toAdd = new Chromosome(currChromosome, totalRouteSize);
+				pop.addChromosome(toAdd);
+			}
+		}
+		return null;
 	}
 
 	/**
