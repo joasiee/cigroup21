@@ -117,26 +117,26 @@ public class TSPData implements Serializable {
      * @param filePath Path to the solution file
      */
     public void writeActionFile(int[] productOrder, String filePath) throws FileNotFoundException {
-        int totalLength = startDistances[productOrder[0]];
+        int totalLength = startDistances[productOrder[0]-1];
         for (int i = 0; i < productOrder.length - 1; i++) {
             int from = productOrder[i];
             int to = productOrder[i+1];
-            totalLength += distances[from][to];
+            totalLength += distances[from - 1][to - 1];
         }
-        totalLength += endDistances[productOrder[productOrder.length - 1]] + productOrder.length;
+        totalLength += endDistances[productOrder[productOrder.length - 1]-1] + productOrder.length;
 
         StringBuilder sb = new StringBuilder();
         sb.append(totalLength).append(";\n");
         sb.append(spec.getStart()).append(";\n");
-        sb.append(startToProduct[productOrder[0]]);
-        sb.append("take product #").append(productOrder[0] + 1).append(";\n");
+        sb.append(startToProduct[productOrder[0]-1]);
+        sb.append("take product #").append(productOrder[0]).append(";\n");
         for (int i = 0; i < productOrder.length - 1; i++) {
             int from = productOrder[i];
             int to = productOrder[i+1];
-            sb.append(productToProduct[from][to]);
-            sb.append("take product #").append(to + 1).append(";\n");
+            sb.append(productToProduct[from-1][to-1]);
+            sb.append("take product #").append(to).append(";\n");
         }
-        sb.append(productToEnd[productOrder[productOrder.length - 1]]);
+        sb.append(productToEnd[productOrder[productOrder.length - 1]-1]);
 
         PrintWriter pw = new PrintWriter(filePath);
         pw.write(sb.toString());
@@ -236,8 +236,8 @@ public class TSPData implements Serializable {
      */
     public static void main(String[] args) throws IOException, ClassNotFoundException {
         GUI gui = new GUI();
-    	int gen = 20;
-        int noGen = 30;
+    	int gen = 40;
+        int noGen = 250;
         double Q = 150;
         double evap = .3;
         String persistFile = "./tmp/productMatrixDist";
