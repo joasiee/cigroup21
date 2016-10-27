@@ -45,8 +45,8 @@ public class GeneticAlgorithm {
 		int[] currChromosomeOrder;
 		int totalRouteSize;
 		int bestSize = 9999999;
-		Stack<Chromosome> bestChromosome = new Stack<Chromosome>();
-		
+		Chromosome bestCurrentChromosome = new Chromosome(new int[2]);
+		bestCurrentChromosome.setRouteSize(9999999);
 
 		// genetic algorithm
 		for (int i = 0; i < this.generations; i++) {
@@ -68,11 +68,12 @@ public class GeneticAlgorithm {
 
 				totalRouteSize += pd.getEndDistances()[currProduct - 1];
 				pop.chromosomes.get(j).setRouteSize(totalRouteSize);
-				if(totalRouteSize < bestSize){
-					bestSize = totalRouteSize;
-					gui.updateSize(bestSize);
-					bestChromosome.push(pop.chromosomes.get(j));
-				}
+			}
+			Chromosome tempFittest = pop.returnBest();
+			if(tempFittest.getFitness() > bestCurrentChromosome.getFitness()){
+				bestCurrentChromosome = tempFittest;
+				bestSize = bestCurrentChromosome.getRouteSize();
+				gui.updateSize(bestSize);
 			}
 			if(i != this.generations - 1){
 				pop = pop.findNextPopulation(this.popSize);
@@ -81,7 +82,7 @@ public class GeneticAlgorithm {
 		
 		//return pop.returnBest().getOrder();
 		
-		return bestChromosome.pop().getOrder();
+		return bestCurrentChromosome.getOrder();
 	}
 
 	/**

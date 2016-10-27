@@ -6,6 +6,8 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Population {
 
 	protected ArrayList<Chromosome> chromosomes;
+	private static double mutationRate = 0.1;
+	private static double crossoverRate = 0.6;
 	
 	public Population(){
 		this.chromosomes = new ArrayList<Chromosome>();
@@ -17,95 +19,130 @@ public class Population {
 	
 	public Population findNextPopulation(int popSize){
 		Population res = new Population();
+		Chromosome a;
+		Chromosome b;
+		Chromosome winner;
+		Chromosome loser;
 		while(res.chromosomes.size() < popSize){
-			Chromosome currChromosomeA = rouletteWheelSelect();
-			Chromosome currChromosomeB = rouletteWheelSelect();
+			do {a = rouletteWheelSelect(); b = rouletteWheelSelect();} while(a.equals(b));
 			double rand = ThreadLocalRandom.current().nextDouble(0, 1 + 1);
 			
-			//70% chance to crossover
-			if(rand < 0.70){
-				Stack<Chromosome> crossedChromosomes = crossoverChromosomes(currChromosomeA,currChromosomeB);
-				res.addChromosome(crossedChromosomes.pop());
-				res.addChromosome(crossedChromosomes.pop());
-			} else{
-				res.addChromosome(currChromosomeA);
-				res.addChromosome(currChromosomeB);
+			if (a.getFitness() > b.getFitness()){
+				winner = a;
+				loser = b;
 			}
+			else{
+				winner = b;
+				loser = a;
+			}
+			
+			Chromosome temp = winner;
+			
+			//70% chance to crossover
+			if(rand < crossoverRate){
+				temp = crossoverChromosomes(winner,loser);
+				
+			}
+			res.addChromosome(temp);
 		}
 		
-		/*for(Chromosome c : res.chromosomes){
+		for(Chromosome c : res.chromosomes){
 			double rand = ThreadLocalRandom.current().nextDouble(0, 1 + 1);
-			if(rand < 0.08){
-				c.mutateChromosome();
+			if(rand < mutationRate){
+				c.scrambleMutation();
 			}
-		}*/
+		}
 		
 		return res;
 	}
 	
 	public Chromosome rouletteWheelSelect(){
-		float totalScore = 0;
-	    float runningScore = 0;
-	    for (Chromosome c : this.chromosomes)
-	    {
-	        totalScore += c.getFitness();
-	    }
-
-	    float rnd = (float) (Math.random() * totalScore);
-
-	    for (Chromosome c : this.chromosomes)
-	    {   
-	        if (    rnd>=runningScore &&
-	                rnd<=runningScore+c.getFitness())
-	        {
-	            return c;
-	        }
-	        runningScore+=c.getFitness();
-	    }
-
-	    return null;
+		int totalSum = 0;
+		for(Chromosome c : this.chromosomes){
+			totalSum += c.getFitness();
+		}
+		int rand = ThreadLocalRandom.current().nextInt(0, totalSum + 1);
+		int partialSum = 0;
+		for(Chromosome c: this.chromosomes){
+			partialSum += c.getFitness();
+			if(partialSum >= rand){
+				return c;
+			}
+		}
+		return null;
 	}
 	
-	private void shuffle(int[] chromosome) {
-		int n = chromosome.length;
-		for (int i = 0; i < n; i++) {
-			int r = i + (int) (Math.random() * (n - i));
-			int swap = chromosome[r];
-			chromosome[r] = chromosome[i];
-			chromosome[i] = swap;
+	public Chromosome crossoverChromosomes(Chromosome c1, Chromosome c2){
+		int l = c1.getLength();
+		int[] c1Order = c1.getOrder();
+		int[] c2Order = c2.getOrder();
+		int rand1 = ThreadLocalRandom.current().nextInt(0, l);
+		int rand2 = ThreadLocalRandom.current().nextInt(0, l);
+		
+		while(rand1 >= rand2) {
+			rand1 = ThreadLocalRandom.current().nextInt(0, l);
+			rand2 = ThreadLocalRandom.current().nextInt(0, l);
 		}
+		
+		int[] child = new int[l];
+		for(int i = 0; i<l; i++){
+			child[i] = -1;
+		}
+		
+		for(int i = rand1; i<= rand2; i++){
+			child[i] = c1Order[i];
+		}
+		
+		int[] y = new int[l-(rand2-rand1)-1];
+		int j = 0;
+		for(int i = 0; i < l; i++){
+			if(!arrayContains(child,c1Order[i])){
+				y[j] = c1Order[i];
+				j++;
+			}
+		}
+		
+		int[] copy = c2Order.clone();
+		rotate(copy, l-rand2-1);
+		
+		int[] y1 = new int[l-(rand2-rand1)-1];
+		j=0;
+		for(int i = 0; i< l; i++){
+			if(arrayContains(y,copy[i])){
+				y1[j] = copy[i];
+				j++;
+			}
+		}
+		
+		j = 0;
+		for(int i = 0; i < y1.length; i++){
+			int ci = (rand2 + i + 1) % l;
+			child[ci] = y1[i];
+		}
+		
+		Chromosome childC = new Chromosome(child);
+		
+		return childC;
 	}
 	
-	public Stack<Chromosome> crossoverChromosomes(Chromosome c1, Chromosome c2){
-		int rand = ThreadLocalRandom.current().nextInt(1, c1.getLength());
-		int c1Order[] = c1.getOrder();
-		int c2Order[] = c2.getOrder();
-		
-		int[] sliceC1a = Arrays.copyOfRange(c1Order, 0, rand);
-		int[] sliceC1b = Arrays.copyOfRange(c1Order, rand, c1.getLength());
-		int[] sliceC2a = Arrays.copyOfRange(c2Order, 0, rand);
-		int[] sliceC2b = Arrays.copyOfRange(c2Order, rand, c2.getLength());
-		
-		double rand2 = ThreadLocalRandom.current().nextDouble(1, 1 + 1);
-		if(rand2<0.50){
-			shuffle(sliceC1a);
-			shuffle(sliceC2a);
-		}else{
-			shuffle(sliceC1b);
-			shuffle(sliceC2b);
+	public static boolean arrayContains(int[] arr, int targetValue) {
+		for(int s: arr){
+			if(s == targetValue){
+				return true;
+			}
 		}
-		
-		c1Order = concat(sliceC1a,sliceC1b);
-		c2Order = concat(sliceC2a,sliceC2b);
-		
-		Stack<Chromosome> res = new Stack<Chromosome>();
-		Chromosome res1 = new Chromosome(c1Order);
-		Chromosome res2 = new Chromosome(c2Order);
-		
-		res.push(res1);
-		res.push(res2);
-		
-		return res;
+		return false;
+	}
+	
+	public static void rotate(int[] arr, int order) {
+		int offset = arr.length - order % arr.length;
+		if (offset > 0) {
+			int[] copy = arr.clone();
+			for(int i = 0; i < arr.length; i++){
+				int j = (i + offset) % arr.length;
+				arr[i] = copy[j];
+			}
+		}
 	}
 	
 	public int[] concat(int[] a, int[] b) {
@@ -118,17 +155,12 @@ public class Population {
 		}
 	
 	public Chromosome returnBest(){
-		double bestSize = this.chromosomes.get(0).getFitness();
-		Stack<Chromosome> bestC = new Stack<Chromosome>();
+		Chromosome bestC = this.chromosomes.get(0);
 		for(Chromosome c : this.chromosomes){
-			if(c.getFitness() < bestSize){
-				bestC.push(c);
+			if(c.getFitness() > bestC.getFitness()){
+				bestC = c;
 			}
 		}
-		if(bestC.size() > 0){
-			return bestC.pop();
-		}else{
-			return this.chromosomes.get(0);
-		}
+		return bestC;
 	}
 }
