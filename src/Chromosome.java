@@ -73,7 +73,7 @@ public class Chromosome {
 	
 	public void setRouteSize(int s){
 		this.routeSize = s;
-		this.fitness = 100000 / s;
+		this.fitness = 15000 / s;
 	}
 	
 	public int getRouteSize(){
