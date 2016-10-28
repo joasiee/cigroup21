@@ -90,8 +90,8 @@ public class GeneticAlgorithm {
 	 */
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 		GUI gui = new GUI();
-		int populationSize = 400;
-		int generations = 3000;
+		int populationSize = 40;
+		int generations = 50000;
 		String persistFile = "./tmp/productMatrixDist";
 		TSPData tspData = TSPData.readFromFile(persistFile);
 		GeneticAlgorithm ga = new GeneticAlgorithm(generations, populationSize);

@@ -6,8 +6,8 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Population {
 
 	protected ArrayList<Chromosome> chromosomes;
-	private static double mutationRate = 0.1;
-	private static double crossoverRate = 0.6;
+	private static double mutationRate = 0.05;
+	private static double crossoverRate = 0.8;
 	
 	public Population(){
 		this.chromosomes = new ArrayList<Chromosome>();
