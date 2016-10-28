@@ -14,6 +14,7 @@ public class GUI {
 	private JTextField tf_path;
 	private JTextField tf_genG;
 	private JTextField tf_genC;
+	private JFrame frame;
 	private long startTime;
 	
 	public GUI(){
@@ -22,7 +23,7 @@ public class GUI {
 	}
 	
 	private void setFrame(){
-		JFrame frame = new JFrame();
+		frame = new JFrame();
 		JPanel panel = new JPanel();
 
 		JLabel lbl_path = new JLabel("Path: ");
@@ -163,6 +164,18 @@ public class GUI {
 			);
 		
 		tf_time.setText(time);
+	}
+	
+	public String getTime(){
+		return tf_time.getText();
+	}
+	
+	public int getPathLength(){
+		return Integer.parseInt(tf_path.getText());
+	}
+	
+	public void close(){
+		frame.dispose();
 	}
 	
 }

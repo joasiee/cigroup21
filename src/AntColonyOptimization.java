@@ -93,18 +93,78 @@ public class AntColonyOptimization {
      * Driver function for Assignment 1
      */
     public static void main(String[] args) throws FileNotFoundException {
-        GUI gui = new GUI();
-        int gen = 200;
-        int noGen = 30;
-        double Q = 150;
-        double evap = .3;
-        Maze maze = Maze.createMaze("./data/insane maze.txt");
-        PathSpecification spec = PathSpecification.readCoordinates("./data/insane coordinates.txt");
+        //runOnce();
+    	getOptimalParameters();
+    }
+    
+    
+    public static void runOnce() throws FileNotFoundException{
+    	GUI gui = new GUI();
+        int gen = 150;
+        int noGen = 20;
+        double Q = 1000;
+        double evap = .05;
+        Maze maze = Maze.createMaze("./data/hard maze.txt");
+        PathSpecification spec = PathSpecification.readCoordinates("./data/hard coordinates.txt");
         AntColonyOptimization aco = new AntColonyOptimization(maze, gen, noGen, Q, evap);
         long startTime = System.currentTimeMillis();
         Route shortestRoute = aco.findShortestRoute(spec, gui);
         System.out.println("Time taken: " + ((System.currentTimeMillis() - startTime) / 1000.0));
         shortestRoute.writeToFile("./data/insane_solution.txt");
         System.out.println(shortestRoute.size());
+    }
+    
+    public static void getOptimalParameters() throws FileNotFoundException{
+    	int noGen =  5;
+    	// int gen =  150;
+    	// double Q = 1000;
+    	//double evap = .05;
+    	
+    	double bestTime = -1;
+    	int bestSize = -1;
+    	
+    	int bestGen = -1;
+    	double bestQ = -1;
+    	double bestEvap = -1;
+    	
+    	
+    	
+    	for(int gen = 20; gen<200; gen = gen + 20){
+    		for(double Q = 200; Q<2000; Q = Q + 200){
+    			for(double evap = 0.1; evap<0.5; evap = evap + 0.1){
+    				GUI gui = new GUI();
+    				Maze maze = Maze.createMaze("./data/hard maze.txt");
+    		        PathSpecification spec = PathSpecification.readCoordinates("./data/hard coordinates.txt");
+    		        AntColonyOptimization aco = new AntColonyOptimization(maze, gen, noGen, Q, evap);
+    		        long startTime = System.currentTimeMillis();
+    		        Route shortestRoute = aco.findShortestRoute(spec, gui);
+    		        gui.close();
+
+    		        double newTime = ((System.currentTimeMillis() - startTime) / 1000.0);
+    		        int newSize = shortestRoute.size();
+    		        if(newSize<bestSize || bestSize == -1){
+    		        	bestTime = newTime;
+    		        	bestSize = newSize;
+    		        	bestGen = gen;
+    		        	bestQ = Q;
+    		        	bestEvap = evap;
+    		        }
+    		        
+    			}
+    		}
+    	}
+    	
+    	System.out.println("Best Size: " + bestSize);
+    	System.out.println("Corresponding Time: " + bestTime);
+    	System.out.println("Parameters:"
+    			+ "\nNumber of ants: " + bestGen
+    			+ "\nNumber of steps: " + bestQ
+    			+ "\nEvap constant: " + bestEvap);
+    	
+    	
+    	
+    	
+    	
+    	
     }
 }
