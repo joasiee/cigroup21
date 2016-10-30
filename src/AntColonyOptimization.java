@@ -104,8 +104,8 @@ public class AntColonyOptimization {
         int noGen = 20;
         double Q = 1000;
         double evap = .05;
-        Maze maze = Maze.createMaze("./data/hard maze.txt");
-        PathSpecification spec = PathSpecification.readCoordinates("./data/hard coordinates.txt");
+        Maze maze = Maze.createMaze("./data/medium maze.txt");
+        PathSpecification spec = PathSpecification.readCoordinates("./data/medium coordinates.txt");
         AntColonyOptimization aco = new AntColonyOptimization(maze, gen, noGen, Q, evap);
         long startTime = System.currentTimeMillis();
         Route shortestRoute = aco.findShortestRoute(spec, gui);
@@ -133,8 +133,8 @@ public class AntColonyOptimization {
     		for(double Q = 200; Q<2000; Q = Q + 200){
     			for(double evap = 0.1; evap<0.5; evap = evap + 0.1){
     				GUI gui = new GUI();
-    				Maze maze = Maze.createMaze("./data/hard maze.txt");
-    		        PathSpecification spec = PathSpecification.readCoordinates("./data/hard coordinates.txt");
+    				Maze maze = Maze.createMaze("./data/medium maze.txt");
+    		        PathSpecification spec = PathSpecification.readCoordinates("./data/medium coordinates.txt");
     		        AntColonyOptimization aco = new AntColonyOptimization(maze, gen, noGen, Q, evap);
     		        long startTime = System.currentTimeMillis();
     		        Route shortestRoute = aco.findShortestRoute(spec, gui);
